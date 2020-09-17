@@ -1,0 +1,9 @@
+[Unit]
+Description=Modem monitor
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /usr/bin/modem_monitor.sh
+
+[Install]
+WantedBy=multi-user.target
