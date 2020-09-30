@@ -6,9 +6,12 @@ HUAWEI_DEVICE=""
 
 while :
 do
+	if [ -z "$HUAWEI_DEVICE" ]; then
+		echo `date`: "Searching for HUAWEI Modem Device..." | tee -a $LOG_DIR
+	fi
+
 	while [ -z "$HUAWEI_DEVICE" ]
 	do
-		echo `date`: "Searching for HUAWEI Modem Device..." | tee -a $LOG_DIR
 		HUAWEI_DEVICE=`lsusb | grep Huawei | cut -d : -f 1 | grep -oP '\d+'`
 		sleep 20
 	done
@@ -22,9 +25,7 @@ do
 
 	while [ -n "$HUAWEI_DEVICE" ]
 	do
-		if ls /sys/class/net/ppp* 1> /dev/null; then
-			echo `date`: 'connection active...' | tee -a $LOG_DIR
-		else
+		if ! ls /sys/class/net/ppp* 1> /dev/null; then
 			echo `date`: 'connection inactive...' | tee -a $LOG_DIR $ERR_LOG_DIR
 
 			if ! ls /dev/ttyUSB0 &> /dev/null; then
